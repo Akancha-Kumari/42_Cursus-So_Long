@@ -6,7 +6,7 @@
 /*   By: akumari <akumari@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:35:49 by akumari           #+#    #+#             */
-/*   Updated: 2025/02/27 15:56:21 by akumari          ###   ########.fr       */
+/*   Updated: 2025/02/28 16:37:48 by akumari          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,27 +36,52 @@ char	**temp_map(char **map, int row)
 
 	new_map = malloc(sizeof(char *) * (row + 1));
 	if (!new_map)
-		return (0);
+		return (NULL);
 	i = 0;
 	while (i < row)
 	{
 		new_map[i] = ft_strdup(map[i]);
+		if (!new_map[i])
+		{
+			while (i > 0)
+				free(new_map[--i]);
+			free(new_map);
+			return (NULL);
+		}
 		i++;
 	}
 	new_map[row] = NULL;
 	return (new_map);
 }
 
+void initialize_variables(t_game *game)
+{
+	game->collectibles = 0;
+	game->exit = 0;
+	game->map_row = get_map_row(game->map);
+	game->map_col = ft_strlen(game->map[0]);
+	game->player_pos = NULL;
+    game->player_pos = malloc(sizeof(t_pos));
+
+    if (game->player_pos) 
+    {
+        game->player_pos->x = -1;
+        game->player_pos->y = -1;
+    }
+    else
+    {
+        printf("Failed to allocate memory for player position\n");
+        exit(1); 
+    }
+}
+
 void	player_pos_and_get_collec_and_exit(t_game *game)
 {
 	int	y;
 	int	x;
-	
-	game->collectibles = 0;
-	game->exit = 0;
+
 	y = 0;
-	game->map_row = get_map_row(game->map);
-	game->map_col = ft_strlen(game->map[0]);
+	initialize_variables(game);
 	while (y < game->map_row)
 	{
 		x = 0;
@@ -77,7 +102,6 @@ void	player_pos_and_get_collec_and_exit(t_game *game)
 	}
 }
 
-
 int	valid_path(char **map, t_game *game)
 {
 	int		col;
@@ -90,10 +114,7 @@ int	valid_path(char **map, t_game *game)
 	game->map_row = row;
 	copy_map = temp_map(map, row);
 	if (copy_map == NULL)
-	{
-		free_map(copy_map);
 		return (0);
-	}
 	player_pos_and_get_collec_and_exit(game);
 	dfs_map(copy_map, game->player_pos->y, game->player_pos->x, game);
 	free_map(copy_map);
@@ -101,55 +122,13 @@ int	valid_path(char **map, t_game *game)
 		return (1);
 	else
 		return (0);
-	return (1);
 }
 
-//	//game->exit = exit_count(map, row, col);
-// row, col,
-// t_pos	player_start_pos(char **map, int column, int row)
-// {
-// 	t_pos	position;
-// 	int		i;
-// 	int		j;
-
-// 	position = (t_pos){-1, -1};
-// 	i = 0;
-// 	while (i < row)
-// 	{
-// 		j = 0;
-// 		while (j < column)
-// 		{
-// 			if (map[i][j] == 'P')
-// 			{
-// 				position.x = i;
-// 				position.y = j;
-// 				return (position);
-// 			}
-// 			j++;
-// 		}
-// 		i++;
-// 	}
-// 	return (position);
-// }
-
-// int	exit_count(char **map, int row, int col)
-// {
-// 	int	count;
-// 	int	i;
-// 	int	j;
-
-// 	count = 0;
-// 	i = 0;
-// 	while (i < row)
-// 	{
-// 		j = 0;
-// 		while (j < col)
-// 		{
-// 			if (map[i][j] == 'E')
-// 				count++;
-// 			j++;
-// 		}
-// 		i++;
-// 	}
-// 	return (count);
-// }
+	// if (game->player_pos)
+	// 	free(game->player_pos);
+	// if (!game->player_pos || game->player_pos->x == -1 || game->player_pos->y == -1)
+    // {
+	// 	free(game->player_pos);
+    //     printf("Error: No player position found!\n");
+    //     exit(1);
+    // }

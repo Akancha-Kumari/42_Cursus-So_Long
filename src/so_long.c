@@ -6,7 +6,7 @@
 /*   By: akumari <akumari@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 16:01:40 by akumari           #+#    #+#             */
-/*   Updated: 2025/02/27 15:57:14 by akumari          ###   ########.fr       */
+/*   Updated: 2025/02/28 16:39:08 by akumari          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,10 @@ int	init_game(t_game *game)
 	game->mlx = mlx_init(game->map_col * TILE_SIZE, game->map_row * TILE_SIZE,
 			"so_long", true);
 	if (!game->mlx)
+	{
+		free_map(game->map);
 		return (0);
+	}
 	load_textures(game);
 	load_images(game);
 	render_map(game, game->map_image);
@@ -33,40 +36,49 @@ int	init_game(t_game *game)
 	return (1);
 }
 
-int	main(int argc, char *argv[])
+int	input_check(int argc, char *param)
 {
-	t_game	game;
 	size_t	len;
 
 	if (argc != 2)
-	{
-		printf("\e[33mTry: ./so_long <MAP>.ber \e[0m\n");
-		return (EXIT_FAILURE);
-	}
-	len = ft_strlen(argv[1]);
-	if (len >= 4 && ft_strcmp(argv[1] + len - 4, ".ber") == 0)
-	{
-		printf("The file has a .ber extension.\n");
-		game.map = read_map(argv[1]);
-		if (game.map == NULL)
-			return (1);
-		printf("Printing the map.\n");
-		print_map(game.map);
-		if (!validate_map(game.map))
-			return (free_map(game.map), 1);
-		printf("Map is valid.\n");
-		if (!valid_path(game.map, &game))
-			printf("Path Invalid\n");
-		player_pos_and_get_collec_and_exit(&game);
-		if (init_game(&game) == 1)
-			printf("You Won!!!\n");
-		else
-			printf("problem in initializing the game.\n");
-	}
+		return (printf(FILE_MSG), 0);
 	else
 	{
-		printf("The file does not have a .ber extension.\n");
-		return (1);
+		len = ft_strlen(param);
+		if (len >= 4 && ft_strcmp(param + len - 4, ".ber") == 0)
+			return (1);
+		else
+			return (printf(FILE_EXT_MSG), 0);
 	}
 	return (0);
 }
+
+int	main(int argc, char *argv[])
+{
+	t_game	game;
+	char	*param;
+	
+	param = argv[1];
+	if (input_check(argc, param))
+	{
+		game.map = read_map(argv[1]);
+		if (game.map == NULL)
+			return (1);
+		if (!validate_map(game.map))
+			return (free_map(game.map), 1);
+		if (!valid_path(game.map, &game))
+			return (printf(PATH_MSG), free_map(game.map), 1);
+		player_pos_and_get_collec_and_exit(&game);
+		if (!init_game(&game))
+		{
+			free_map(game.map);
+			free(game.map_texture);
+			free(game.map_image);
+			free(game.player_pos);
+			return (printf(INIT_GAME), 1);
+		}	
+		free_game(&game);
+	}
+	return (0);
+}
+

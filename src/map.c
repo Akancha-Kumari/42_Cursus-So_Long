@@ -6,28 +6,30 @@
 /*   By: akumari <akumari@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 11:28:51 by akumari           #+#    #+#             */
-/*   Updated: 2025/02/27 15:31:28 by akumari          ###   ########.fr       */
+/*   Updated: 2025/02/28 14:18:37 by akumari          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
+#include <ctype.h>
 
-void	print_map(char **map)
+int	get_map_row(char **map)
 {
-	int	i;
+	int	count;
 
-	if (!map)
+	count = 0;
+	while (map[count])
 	{
-		printf("Error: Map is NULL\n");
-		return ;
+		count++;
 	}
-	i = 0;
-	while (map[i] != NULL)
-	{
-		printf("%s\n", map[i]);
-		i++;
-	}
+	return (count);
 }
+int is_empty_map(const char *str)
+{
+    if(!str || !str[0])
+		return (0);
+    return (1);
+}	
 
 char	**read_map(char *map)
 {
@@ -42,55 +44,16 @@ char	**read_map(char *map)
 	fd = open(map, O_RDONLY);
 	if (fd < 0)
 	{
-		free(temp_map);
 		printf("Error: Could not open file %s\n", map);
-		return (NULL);
+		return (free(temp_map), NULL);
 	}
 	fileread = read(fd, temp_map, BUFFER_SIZE);
-	if (fileread <= 0)
-	{
-		free(temp_map);
-		close(fd);
-		return (0);
-	}
+	if (fileread <= 0 || !(is_empty_map(map)))
+		return (printf(EMPTY_MAP), close(fd), free(temp_map), NULL);
 	get_map = ft_split(temp_map, '\n');
 	if (get_map == NULL)
-	{
-		free(temp_map);
-		close(fd);
-		return (NULL);
-	}
+		return (close(fd), free(temp_map), NULL);
 	free(temp_map);
 	close(fd);
 	return (get_map);
 }
-//	printf("Openfile - %d\n", fd);
-//	printf("readfile - %d\n", fileread);
-// void	design_map(t_game *game, char **map)
-// {
-// 	game->number_of_collectible = total_collectible(map);
-// 	game->map_col = ft_strlen(map[0]) * 32;
-// 	game->map_row = get_map_row(map) * 32;
-// }
-
-// int	total_collectible(char **map)
-// {
-// 	int	count;
-// 	int	i;
-// 	int	j;
-
-// 	count = 0;
-// 	i = 0;
-// 	while (map[i])
-// 	{
-// 		j = 0;
-// 		while (map[i][j])
-// 		{
-// 			if (map[i][j] == 'C')
-// 				count++;
-// 			j++;
-// 		}
-// 		i++;
-// 	}
-// 	return (count);
-// }

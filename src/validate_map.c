@@ -6,23 +6,11 @@
 /*   By: akumari <akumari@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 11:27:56 by akumari           #+#    #+#             */
-/*   Updated: 2025/02/27 15:39:37 by akumari          ###   ########.fr       */
+/*   Updated: 2025/02/28 14:09:33 by akumari          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
-
-int	get_map_row(char **map)
-{
-	int	count;
-
-	count = 0;
-	while (map[count])
-	{
-		count++;
-	}
-	return (count);
-}
 
 int	map_is_rectangle(char **map)
 {
@@ -106,25 +94,15 @@ int	validate_map(char **map)
 	exit_count = 0;
 	collectible_count = 0;
 	if (!map_is_rectangle(map))
-		return (0);
+		return (printf(RECTANGLE_MAP), 0);
 	if (!surrounded_by_walls(map))
-		return (0);
+		return (printf(WALL_MSG), 0);
 	if (!validate_characters(map, &player_count, &exit_count,
 			&collectible_count))
-		return (0);
+		return (printf(WRONG_COMP), 0);
 	if (player_count != 1)
-	{
-		printf("Error: Map must contain exactly one player (P).\n");
-		return (0);
-	}
+		return (printf(PLAYER_COUNT), 0);
 	if (exit_count == 0 || collectible_count == 0)
-	{
-		printf("Error: At least one exit (E) and collectible (C) required.\n");
-		return (0);
-	}
+		return (printf(COLLECT_EXIT_COUNT), 0);
 	return (1);
 }
-
-	// printf("player: %d\t exit: %d\t collectible:%d\n", *player_count,
-	// 	*exit_count, *collectible_count);
-	//printf("rows are: %d\t columns are: %d\n", row, col);
