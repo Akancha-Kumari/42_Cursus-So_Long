@@ -6,11 +6,11 @@
 /*   By: akumari <akumari@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 11:00:08 by akumari           #+#    #+#             */
-/*   Updated: 2025/02/20 11:00:25 by akumari          ###   ########.fr       */
+/*   Updated: 2025/03/05 13:20:23 by akumari          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "../include/so_long.h"
 
 static char	*ft_strndup(const char *s, size_t n)
 {

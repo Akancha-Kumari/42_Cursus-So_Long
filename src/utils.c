@@ -6,11 +6,11 @@
 /*   By: akumari <akumari@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 14:55:49 by akumari           #+#    #+#             */
-/*   Updated: 2025/02/20 14:50:19 by akumari          ###   ########.fr       */
+/*   Updated: 2025/03/10 15:59:48 by akumari          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "../include/so_long.h"
 
 int	ft_strlen(char *str)
 {

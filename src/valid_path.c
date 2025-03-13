@@ -6,11 +6,11 @@
 /*   By: akumari <akumari@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 13:35:49 by akumari           #+#    #+#             */
-/*   Updated: 2025/02/28 16:37:48 by akumari          ###   ########.fr       */
+/*   Updated: 2025/03/05 13:20:42 by akumari          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "../include/so_long.h"
 
 void	dfs_map(char **map, int y, int x, t_game *game)
 {
@@ -54,25 +54,14 @@ char	**temp_map(char **map, int row)
 	return (new_map);
 }
 
-void initialize_variables(t_game *game)
+void	initialize_variables(t_game *game)
 {
 	game->collectibles = 0;
 	game->exit = 0;
 	game->map_row = get_map_row(game->map);
 	game->map_col = ft_strlen(game->map[0]);
-	game->player_pos = NULL;
-    game->player_pos = malloc(sizeof(t_pos));
-
-    if (game->player_pos) 
-    {
-        game->player_pos->x = -1;
-        game->player_pos->y = -1;
-    }
-    else
-    {
-        printf("Failed to allocate memory for player position\n");
-        exit(1); 
-    }
+	game->player_pos.x = -1;
+	game->player_pos.y = -1;
 }
 
 void	player_pos_and_get_collec_and_exit(t_game *game)
@@ -89,8 +78,8 @@ void	player_pos_and_get_collec_and_exit(t_game *game)
 		{
 			if (game->map[y][x] == 'P')
 			{
-				game->player_pos->x = x;
-				game->player_pos->y = y;
+				game->player_pos.x = x;
+				game->player_pos.y = y;
 			}
 			else if (game->map[y][x] == 'C')
 				game->collectibles++;
@@ -116,19 +105,10 @@ int	valid_path(char **map, t_game *game)
 	if (copy_map == NULL)
 		return (0);
 	player_pos_and_get_collec_and_exit(game);
-	dfs_map(copy_map, game->player_pos->y, game->player_pos->x, game);
+	dfs_map(copy_map, game->player_pos.y, game->player_pos.x, game);
 	free_map(copy_map);
 	if (game->collectibles == 0 && game->exit == 0)
 		return (1);
 	else
 		return (0);
 }
-
-	// if (game->player_pos)
-	// 	free(game->player_pos);
-	// if (!game->player_pos || game->player_pos->x == -1 || game->player_pos->y == -1)
-    // {
-	// 	free(game->player_pos);
-    //     printf("Error: No player position found!\n");
-    //     exit(1);
-    // }

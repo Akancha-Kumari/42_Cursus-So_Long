@@ -6,11 +6,11 @@
 /*   By: akumari <akumari@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/20 11:27:56 by akumari           #+#    #+#             */
-/*   Updated: 2025/02/28 14:09:33 by akumari          ###   ########.fr       */
+/*   Updated: 2025/03/12 12:38:05 by akumari          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "../include/so_long.h"
 
 int	map_is_rectangle(char **map)
 {
@@ -94,15 +94,17 @@ int	validate_map(char **map)
 	exit_count = 0;
 	collectible_count = 0;
 	if (!map_is_rectangle(map))
-		return (printf(RECTANGLE_MAP), 0);
+		return (ft_printf(RECTANGLE_MAP), 0);
 	if (!surrounded_by_walls(map))
-		return (printf(WALL_MSG), 0);
+		return (ft_printf(WALL_MSG), 0);
 	if (!validate_characters(map, &player_count, &exit_count,
 			&collectible_count))
-		return (printf(WRONG_COMP), 0);
+		return (ft_printf(WRONG_COMP), 0);
 	if (player_count != 1)
-		return (printf(PLAYER_COUNT), 0);
-	if (exit_count == 0 || collectible_count == 0)
-		return (printf(COLLECT_EXIT_COUNT), 0);
+		return (ft_printf(PLAYER_COUNT), 0);
+	if (exit_count != 1)
+		return (ft_printf(EXIT_COUNT), 0);
+	if (collectible_count == 0)
+		return (ft_printf(COLLECTIBLE_COUNT), 0);
 	return (1);
 }

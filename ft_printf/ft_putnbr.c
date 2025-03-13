@@ -1,47 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_map.c                                         :+:      :+:    :+:   */
+/*   ft_putnbr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akumari <akumari@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/27 15:47:58 by akumari           #+#    #+#             */
-/*   Updated: 2025/03/08 14:34:13 by akumari          ###   ########.fr       */
+/*   Created: 2024/11/15 13:33:21 by akumari           #+#    #+#             */
+/*   Updated: 2024/12/05 09:48:39 by akumari          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/so_long.h"
+#include "ft_printf.h"
 
-void	free_map(char **map)
+void	ft_putnbr(int num, int *count)
 {
-	int	i;
+	long	nbr;
 
-	i = 0;
-	while (map[i])
+	nbr = num;
+	if (nbr < 0)
 	{
-		free(map[i]);
-		i++;
+		ft_putchar('-', count);
+		nbr = -nbr;
 	}
-	free(map);
-}
-
-void	free_map_backup(char **map_backup)
-{
-	int	i;
-
-	i = 0;
-	while (map_backup[i])
-	{
-		free(map_backup[i]);
-		i++;
-	}
-	free(map_backup);
-}
-
-void	free_all(t_game *game)
-{
-	free_map(game->map);
-	free(game->map_texture);
-	free(game->map_image);
-	free_map_backup(game->map_backup);
+	if (nbr > 9)
+		ft_putnbr(nbr / 10, count);
+	ft_putchar(nbr % 10 + '0', count);
 }
